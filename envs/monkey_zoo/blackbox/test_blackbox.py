@@ -155,129 +155,133 @@ class TestMonkeyBlackbox:
     def get_log_dir_path():
         return os.path.abspath(LOG_DIR_PATH)
 
-    def test_ssh_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Ssh, "SSH_exploiter_and_keys")
+    def test_dummy(self, island_client):
+        assert False
 
-    def test_hadoop_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Hadoop, "Hadoop_exploiter", 6 * 60)
 
-    def test_mssql_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Mssql, "MSSQL_exploiter")
+    # def test_ssh_exploiter(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, Ssh, "SSH_exploiter_and_keys")
 
-    def test_powershell_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client, PowerShell, "PowerShell_Remoting_exploiter"
-        )
+    # def test_hadoop_exploiter(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, Hadoop, "Hadoop_exploiter", 6 * 60)
 
-    @pytest.mark.skip_powershell_reuse
-    def test_powershell_exploiter_credentials_reuse(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client,
-            PowerShellCredentialsReuse,
-            "PowerShell_Remoting_exploiter_credentials_reuse",
-        )
+    # def test_mssql_exploiter(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, Mssql, "MSSQL_exploiter")
 
-    def test_smb_and_mimikatz_exploiters(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client, SmbMimikatz, "SMB_exploiter_mimikatz"
-        )
+    # def test_powershell_exploiter(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(
+    #         island_client, PowerShell, "PowerShell_Remoting_exploiter"
+    #     )
 
-    def test_smb_pth(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, SmbPth, "SMB_PTH")
+    # @pytest.mark.skip_powershell_reuse
+    # def test_powershell_exploiter_credentials_reuse(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(
+    #         island_client,
+    #         PowerShellCredentialsReuse,
+    #         "PowerShell_Remoting_exploiter_credentials_reuse",
+    #     )
 
-    def test_drupal_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Drupal, "Drupal_exploiter")
+    # def test_smb_and_mimikatz_exploiters(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(
+    #         island_client, SmbMimikatz, "SMB_exploiter_mimikatz"
+    #     )
 
-    def test_elastic_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Elastic, "Elastic_exploiter")
+    # def test_smb_pth(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, SmbPth, "SMB_PTH")
 
-    def test_struts_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Struts2, "Struts2_exploiter")
+    # def test_drupal_exploiter(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, Drupal, "Drupal_exploiter")
 
-    def test_weblogic_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Weblogic, "Weblogic_exploiter")
+    # def test_elastic_exploiter(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, Elastic, "Elastic_exploiter")
 
-    def test_shellshock_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, ShellShock, "Shellschock_exploiter")
+    # def test_struts_exploiter(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, Struts2, "Struts2_exploiter")
 
-    def test_tunneling(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client, Tunneling, "Tunneling_exploiter", 15 * 60
-        )
+    # def test_weblogic_exploiter(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, Weblogic, "Weblogic_exploiter")
 
-    def test_wmi_and_mimikatz_exploiters(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client, WmiMimikatz, "WMI_exploiter,_mimikatz"
-        )
+    # def test_shellshock_exploiter(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, ShellShock, "Shellschock_exploiter")
 
-    def test_wmi_pth(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, WmiPth, "WMI_PTH")
+    # def test_tunneling(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(
+    #         island_client, Tunneling, "Tunneling_exploiter", 15 * 60
+    #     )
 
-    def test_zerologon_exploiter(self, island_client):
-        test_name = "Zerologon_exploiter"
-        expected_creds = [
-            "Administrator",
-            "aad3b435b51404eeaad3b435b51404ee",
-            "2864b62ea4496934a5d6e86f50b834a5",
-        ]
-        raw_config = IslandConfigParser.get_raw_config(Zerologon, island_client)
-        zero_logon_analyzer = ZerologonAnalyzer(island_client, expected_creds)
-        communication_analyzer = CommunicationAnalyzer(
-            island_client, IslandConfigParser.get_ips_of_targets(raw_config)
-        )
-        log_handler = TestLogsHandler(
-            test_name, island_client, TestMonkeyBlackbox.get_log_dir_path()
-        )
-        ExploitationTest(
-            name=test_name,
-            island_client=island_client,
-            raw_config=raw_config,
-            analyzers=[zero_logon_analyzer, communication_analyzer],
-            timeout=DEFAULT_TIMEOUT_SECONDS,
-            log_handler=log_handler,
-        ).run()
+    # def test_wmi_and_mimikatz_exploiters(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(
+    #         island_client, WmiMimikatz, "WMI_exploiter,_mimikatz"
+    #     )
 
-    @pytest.mark.skip(
-        reason="Perfomance test that creates env from fake telemetries is faster, use that instead."
-    )
-    def test_report_generation_performance(self, island_client, quick_performance_tests):
-        """
-        This test includes the SSH + Elastic + Hadoop + MSSQL machines all in one test
-        for a total of 8 machines including the Monkey Island.
+    # def test_wmi_pth(self, island_client):
+    #     TestMonkeyBlackbox.run_exploitation_test(island_client, WmiPth, "WMI_PTH")
 
-        Is has 2 analyzers - the regular one which checks all the Monkeys
-        and the Timing one which checks how long the report took to execute
-        """
-        if not quick_performance_tests:
-            TestMonkeyBlackbox.run_performance_test(
-                ReportGenerationTest, island_client, Performance, timeout_in_seconds=10 * 60
-            )
-        else:
-            LOGGER.error("This test doesn't support 'quick_performance_tests' option.")
-            assert False
+    # def test_zerologon_exploiter(self, island_client):
+    #     test_name = "Zerologon_exploiter"
+    #     expected_creds = [
+    #         "Administrator",
+    #         "aad3b435b51404eeaad3b435b51404ee",
+    #         "2864b62ea4496934a5d6e86f50b834a5",
+    #     ]
+    #     raw_config = IslandConfigParser.get_raw_config(Zerologon, island_client)
+    #     zero_logon_analyzer = ZerologonAnalyzer(island_client, expected_creds)
+    #     communication_analyzer = CommunicationAnalyzer(
+    #         island_client, IslandConfigParser.get_ips_of_targets(raw_config)
+    #     )
+    #     log_handler = TestLogsHandler(
+    #         test_name, island_client, TestMonkeyBlackbox.get_log_dir_path()
+    #     )
+    #     ExploitationTest(
+    #         name=test_name,
+    #         island_client=island_client,
+    #         raw_config=raw_config,
+    #         analyzers=[zero_logon_analyzer, communication_analyzer],
+    #         timeout=DEFAULT_TIMEOUT_SECONDS,
+    #         log_handler=log_handler,
+    #     ).run()
 
-    @pytest.mark.skip(
-        reason="Perfomance test that creates env from fake telemetries is faster, use that instead."
-    )
-    def test_map_generation_performance(self, island_client, quick_performance_tests):
-        if not quick_performance_tests:
-            TestMonkeyBlackbox.run_performance_test(
-                MapGenerationTest, island_client, "PERFORMANCE.conf", timeout_in_seconds=10 * 60
-            )
-        else:
-            LOGGER.error("This test doesn't support 'quick_performance_tests' option.")
-            assert False
+    # @pytest.mark.skip(
+    #     reason="Perfomance test that creates env from fake telemetries is faster, use that instead."
+    # )
+    # def test_report_generation_performance(self, island_client, quick_performance_tests):
+    #     """
+    #     This test includes the SSH + Elastic + Hadoop + MSSQL machines all in one test
+    #     for a total of 8 machines including the Monkey Island.
 
-    @pytest.mark.run_performance_tests
-    def test_report_generation_from_fake_telemetries(self, island_client, quick_performance_tests):
-        ReportGenerationFromTelemetryTest(island_client, quick_performance_tests).run()
+    #     Is has 2 analyzers - the regular one which checks all the Monkeys
+    #     and the Timing one which checks how long the report took to execute
+    #     """
+    #     if not quick_performance_tests:
+    #         TestMonkeyBlackbox.run_performance_test(
+    #             ReportGenerationTest, island_client, Performance, timeout_in_seconds=10 * 60
+    #         )
+    #     else:
+    #         LOGGER.error("This test doesn't support 'quick_performance_tests' option.")
+    #         assert False
 
-    @pytest.mark.run_performance_tests
-    def test_map_generation_from_fake_telemetries(self, island_client, quick_performance_tests):
-        MapGenerationFromTelemetryTest(island_client, quick_performance_tests).run()
+    # @pytest.mark.skip(
+    #     reason="Perfomance test that creates env from fake telemetries is faster, use that instead."
+    # )
+    # def test_map_generation_performance(self, island_client, quick_performance_tests):
+    #     if not quick_performance_tests:
+    #         TestMonkeyBlackbox.run_performance_test(
+    #             MapGenerationTest, island_client, "PERFORMANCE.conf", timeout_in_seconds=10 * 60
+    #         )
+    #     else:
+    #         LOGGER.error("This test doesn't support 'quick_performance_tests' option.")
+    #         assert False
 
-    @pytest.mark.run_performance_tests
-    def test_telem_performance(self, island_client, quick_performance_tests):
-        TelemetryPerformanceTest(
-            island_client, quick_performance_tests
-        ).test_telemetry_performance()
+    # @pytest.mark.run_performance_tests
+    # def test_report_generation_from_fake_telemetries(self, island_client, quick_performance_tests):
+    #     ReportGenerationFromTelemetryTest(island_client, quick_performance_tests).run()
+
+    # @pytest.mark.run_performance_tests
+    # def test_map_generation_from_fake_telemetries(self, island_client, quick_performance_tests):
+    #     MapGenerationFromTelemetryTest(island_client, quick_performance_tests).run()
+
+    # @pytest.mark.run_performance_tests
+    # def test_telem_performance(self, island_client, quick_performance_tests):
+    #     TelemetryPerformanceTest(
+    #         island_client, quick_performance_tests
+    #     ).test_telemetry_performance()
