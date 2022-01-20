@@ -158,50 +158,50 @@ class TestMonkeyBlackbox:
     def get_log_dir_path():
         return os.path.abspath(LOG_DIR_PATH)
 
-    def test_ssh_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Ssh, "SSH_exploiter_and_keys")
-
-    def test_hadoop_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Hadoop, "Hadoop_exploiter", 6 * 60)
-
-    def test_mssql_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Mssql, "MSSQL_exploiter")
-
-    def test_powershell_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client, PowerShell, "PowerShell_Remoting_exploiter"
-        )
-
-    @pytest.mark.skip_powershell_reuse
-    def test_powershell_exploiter_credentials_reuse(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client,
-            PowerShellCredentialsReuse,
-            "PowerShell_Remoting_exploiter_credentials_reuse",
-        )
-
-    def test_smb_and_mimikatz_exploiters(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client, SmbMimikatz, "SMB_exploiter_mimikatz"
-        )
-
-    def test_smb_pth(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, SmbPth, "SMB_PTH")
-
-    def test_drupal_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Drupal, "Drupal_exploiter")
-
-    def test_elastic_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Elastic, "Elastic_exploiter")
-
-    def test_struts_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Struts2, "Struts2_exploiter")
-
-    def test_weblogic_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, Weblogic, "Weblogic_exploiter")
-
-    def test_shellshock_exploiter(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, ShellShock, "Shellshock_exploiter")
+#    def test_ssh_exploiter(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, Ssh, "SSH_exploiter_and_keys")
+#
+#    def test_hadoop_exploiter(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, Hadoop, "Hadoop_exploiter", 6 * 60)
+#
+#    def test_mssql_exploiter(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, Mssql, "MSSQL_exploiter")
+#
+#    def test_powershell_exploiter(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(
+#            island_client, PowerShell, "PowerShell_Remoting_exploiter"
+#        )
+#
+#    @pytest.mark.skip_powershell_reuse
+#    def test_powershell_exploiter_credentials_reuse(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(
+#            island_client,
+#            PowerShellCredentialsReuse,
+#            "PowerShell_Remoting_exploiter_credentials_reuse",
+#        )
+#
+#    def test_smb_and_mimikatz_exploiters(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(
+#            island_client, SmbMimikatz, "SMB_exploiter_mimikatz"
+#        )
+#
+#    def test_smb_pth(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, SmbPth, "SMB_PTH")
+#
+#    def test_drupal_exploiter(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, Drupal, "Drupal_exploiter")
+#
+#    def test_elastic_exploiter(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, Elastic, "Elastic_exploiter")
+#
+#    def test_struts_exploiter(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, Struts2, "Struts2_exploiter")
+#
+#    def test_weblogic_exploiter(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, Weblogic, "Weblogic_exploiter")
+#
+#    def test_shellshock_exploiter(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, ShellShock, "Shellshock_exploiter")
 
     def test_log4j_solr_exploiter(self, island_client):
         TestMonkeyBlackbox.run_exploitation_test(
@@ -218,42 +218,42 @@ class TestMonkeyBlackbox:
             island_client, Log4jLogstash, "Log4Shell_logstash_exploiter"
         )
 
-    def test_tunneling(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client, Tunneling, "Tunneling_exploiter", 15 * 60
-        )
-
-    def test_wmi_and_mimikatz_exploiters(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(
-            island_client, WmiMimikatz, "WMI_exploiter,_mimikatz"
-        )
-
-    def test_wmi_pth(self, island_client):
-        TestMonkeyBlackbox.run_exploitation_test(island_client, WmiPth, "WMI_PTH")
-
-    def test_zerologon_exploiter(self, island_client):
-        test_name = "Zerologon_exploiter"
-        expected_creds = [
-            "Administrator",
-            "aad3b435b51404eeaad3b435b51404ee",
-            "2864b62ea4496934a5d6e86f50b834a5",
-        ]
-        raw_config = IslandConfigParser.get_raw_config(Zerologon, island_client)
-        zero_logon_analyzer = ZerologonAnalyzer(island_client, expected_creds)
-        communication_analyzer = CommunicationAnalyzer(
-            island_client, IslandConfigParser.get_ips_of_targets(raw_config)
-        )
-        log_handler = TestLogsHandler(
-            test_name, island_client, TestMonkeyBlackbox.get_log_dir_path()
-        )
-        ExploitationTest(
-            name=test_name,
-            island_client=island_client,
-            raw_config=raw_config,
-            analyzers=[zero_logon_analyzer, communication_analyzer],
-            timeout=DEFAULT_TIMEOUT_SECONDS,
-            log_handler=log_handler,
-        ).run()
+#    def test_tunneling(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(
+#            island_client, Tunneling, "Tunneling_exploiter", 15 * 60
+#        )
+#
+#    def test_wmi_and_mimikatz_exploiters(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(
+#            island_client, WmiMimikatz, "WMI_exploiter,_mimikatz"
+#        )
+#
+#    def test_wmi_pth(self, island_client):
+#        TestMonkeyBlackbox.run_exploitation_test(island_client, WmiPth, "WMI_PTH")
+#
+#    def test_zerologon_exploiter(self, island_client):
+#        test_name = "Zerologon_exploiter"
+#        expected_creds = [
+#            "Administrator",
+#            "aad3b435b51404eeaad3b435b51404ee",
+#            "2864b62ea4496934a5d6e86f50b834a5",
+#        ]
+#        raw_config = IslandConfigParser.get_raw_config(Zerologon, island_client)
+#        zero_logon_analyzer = ZerologonAnalyzer(island_client, expected_creds)
+#        communication_analyzer = CommunicationAnalyzer(
+#            island_client, IslandConfigParser.get_ips_of_targets(raw_config)
+#        )
+#        log_handler = TestLogsHandler(
+#            test_name, island_client, TestMonkeyBlackbox.get_log_dir_path()
+#        )
+#        ExploitationTest(
+#            name=test_name,
+#            island_client=island_client,
+#            raw_config=raw_config,
+#            analyzers=[zero_logon_analyzer, communication_analyzer],
+#            timeout=DEFAULT_TIMEOUT_SECONDS,
+#            log_handler=log_handler,
+#        ).run()
 
     @pytest.mark.skip(
         reason="Perfomance test that creates env from fake telemetries is faster, use that instead."
