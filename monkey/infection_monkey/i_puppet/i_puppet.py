@@ -1,6 +1,7 @@
 import abc
 import threading
 from collections import namedtuple
+from dataclasses import dataclass
 from enum import Enum
 from typing import Dict
 
@@ -36,7 +37,7 @@ class IPuppet(metaclass=abc.ABCMeta):
         """
 
     @abc.abstractmethod
-    def run_sys_info_collector(self, name: str) -> Dict:
+    def run_credential_collector(self, name: str) -> dataclass:
         """
         Runs a system info collector
         :param str name: The name of the system info collector to run

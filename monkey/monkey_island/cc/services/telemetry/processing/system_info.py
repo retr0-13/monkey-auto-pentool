@@ -11,20 +11,21 @@ from monkey_island.cc.services.wmi_handler import WMIHandler
 logger = logging.getLogger(__name__)
 
 
-def process_system_info_telemetry(telemetry_json):
-    dispatcher = SystemInfoTelemetryDispatcher()
-    telemetry_processing_stages = [
-        process_ssh_info,
-        process_credential_info,
-        process_wmi_info,
-        dispatcher.dispatch_collector_results_to_relevant_processors,
-    ]
+def process_mimikatz_creds(creds):
+    logger.debug(f"Got mimikatz credentials {creds}")
 
-    # Calling safe_process_telemetry so if one of the stages fail, we log and move on instead of
-    # failing the rest of
-    # them, as they are independent.
-    for stage in telemetry_processing_stages:
-        safe_process_telemetry(stage, telemetry_json)
+
+def process_complex_creds(creds):
+    logger.debug(f"Got complex_credentials {creds}")
+
+
+cred_processors = {"Mimikatz": process_mimikatz_creds, "Complex": process_complex_creds}
+
+
+def process_system_info_telemetry(telemetry_json):
+    cred_type = telemetry_json["data"]["credentials"]["type"]
+    cred_contents = telemetry_json["data"]["credentials"]["data"]
+    cred_processors[cred_type](cred_contents)
 
 
 def safe_process_telemetry(processing_function, telemetry_json):
