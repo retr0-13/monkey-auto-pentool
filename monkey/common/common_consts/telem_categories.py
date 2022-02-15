@@ -8,3 +8,4 @@ class TelemCategoryEnum:
     TUNNEL = "tunnel"
     ATTACK = "attack"
     FILE_ENCRYPTION = "file_encryption"
+    CREDENTIALS = "credentials"
